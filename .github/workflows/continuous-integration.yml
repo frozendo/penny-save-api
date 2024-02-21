@@ -1,0 +1,29 @@
+name: Penny Save Continuous Integration
+
+on: [pull_request]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Set up JDK
+      uses: actions/setup-java@v2
+      with:
+        java-version: '21'
+        distribution: 'adopt'
+    # - name: Permission for gradlew
+    #   run: chmod +x gradlew
+    - name: Clean
+      run: ./gradlew clean
+    - name: Build
+      run: ./gradlew build -x test
+    - name: Unit Test
+      run: ./gradlew testUnit
+    - name: Integration Test
+      run: ./gradlew testIntegration
