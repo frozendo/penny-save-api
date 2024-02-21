@@ -1,6 +1,10 @@
 name: Penny Save Continuous Integration
 
-on: [pull_request]
+on: 
+  push:
+    branches: 
+      - main
+  pull_request:
 
 jobs:
   build:
@@ -23,7 +27,5 @@ jobs:
       run: ./gradlew clean
     - name: Build
       run: ./gradlew build -x test
-    - name: Unit Test
-      run: ./gradlew testUnit
-    - name: Integration Test
-      run: ./gradlew testIntegration
+    - name: Test
+      run: ./gradlew test
