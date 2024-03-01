@@ -9,7 +9,7 @@ dependencies {
     testFixturesImplementation("org.springframework.boot:spring-boot-testcontainers")
     testFixturesImplementation("org.testcontainers:junit-jupiter")
     testFixturesImplementation("org.testcontainers:postgresql")
-    testFixturesImplementation("io.rest-assured:spring-mock-mvc:5.1.1")
+    testFixturesImplementation("io.rest-assured:spring-mock-mvc:5.3.2")
 }
 
 tasks.withType<BootJar> {

@@ -12,7 +12,7 @@ public class DockerTestEnvironment {
 
     @Container
     static JdbcDatabaseContainer postgreSqlContainer = new PostgreSQLContainer("postgres:14-alpine")
-            .withInitScript("schema.sql")
+            .withInitScript("init-database.sql")
             .withDatabaseName("tests-db");
 
     @DynamicPropertySource
