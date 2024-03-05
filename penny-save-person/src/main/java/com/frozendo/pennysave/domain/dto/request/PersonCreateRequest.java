@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDate;
 
@@ -22,12 +23,12 @@ public record PersonCreateRequest(
         String password
 ) {
 
-    public Person convertToEntity() {
+    public Person convertToEntity(BCryptPasswordEncoder encoder) {
         return new Person(
                 this.email,
                 this.name,
                 this.birthDate,
-                this.password
+                encoder.encode(this.password)
         );
     }
 

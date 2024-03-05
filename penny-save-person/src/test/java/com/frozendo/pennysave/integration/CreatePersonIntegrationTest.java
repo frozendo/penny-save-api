@@ -8,14 +8,16 @@ import com.frozendo.pennysave.domain.enums.StatusPersonEnum;
 import com.frozendo.pennysave.enums.ApiMessageEnum;
 import com.frozendo.pennysave.repository.PersonRepository;
 import io.restassured.http.Method;
-import org.assertj.core.api.Assertions;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.time.LocalDate;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @Sql(value = {"/scripts/person.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @Sql(value = {"/scripts/clean.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
@@ -27,6 +29,9 @@ class CreatePersonIntegrationTest extends IntegrationTestsBase {
 
     @Autowired
     private PersonRepository personRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder encoder;
 
     @Test
     void createNewPersonWithoutMandatoryFields() {
@@ -106,6 +111,17 @@ class CreatePersonIntegrationTest extends IntegrationTestsBase {
                 .statusCode(HttpStatus.CREATED.value())
                 .body("id", Matchers.notNullValue())
                 .body("status", Matchers.equalTo(StatusPersonEnum.PENDING.name()));
+
+        var optionalPerson = personRepository.findByEmail(PERSON_EMAIL);
+        assertThat(optionalPerson).isPresent();
+
+        var savedPerson = optionalPerson.get();
+        assertThat(savedPerson.getPassword()).isNotEmpty();
+        assertThat(savedPerson.getPassword()).isNotEqualTo(PERSON_PASSWORD);
+
+        var result = encoder.matches(PERSON_PASSWORD, savedPerson.getPassword());
+
+        assertThat(result).isTrue();
     }
 
     @Test

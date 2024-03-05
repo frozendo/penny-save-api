@@ -4,6 +4,7 @@ import com.frozendo.pennysave.domain.entity.Person;
 import com.frozendo.pennysave.domain.enums.PersonMessageEnum;
 import com.frozendo.pennysave.exceptions.BusinessException;
 import com.frozendo.pennysave.repository.PersonRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
