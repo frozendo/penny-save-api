@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+    </head>
+    <body style="text-align: center;">
+        
+        <main>
+
+            <h1>Penny Save</h1>
+
+            <div 
+            style="max-width: 450px; 
+            background-color: lightgray; 
+            margin: 0px auto; 
+            font-size: 12pt; 
+            padding: 20px;">
+                <p>Olá <span th:utext="${person_name}"></span></p>
+
+                <p>Obrigado por se inscrever em nossa plataforma! Para garantir a segurança de sua conta e começar a desfrutar de todos os recursos disponíveis, precisamos que você confirme seu endereço de e-mail.</p>
+
+                <p>Por favor, clique no link abaixo para verificar seu e-mail e concluir o processo de registro:</p>
+                
+                <a th:href="${confirmation_link}"
+                    style="background-color: #786f07; 
+                    color: white; 
+                    padding: 15px 25px;
+                    text-decoration: none;
+                    margin: 10px auto;
+                    display: block;
+                    width: 180px;
+                    border-radius: 10px">
+                    Confirme sua conta
+                </a>
+
+                <p>Ao concluir a verificação, todas as funcionalidades do app serão liberadas.</p>
+
+                <p>Agradecemos pela sua cooperação.</p>
+
+                <p>Atenciosamente, </br>
+                Equipe Penny Save.</p>
+
+            </div>
+
+        </main>
+    </body>
+</html>
+

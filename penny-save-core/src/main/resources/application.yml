@@ -21,3 +21,14 @@ spring:
     open-in-view: false
   flyway:
     enabled: false
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: application@gmail.com
+    password: 123456
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
