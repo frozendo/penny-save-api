@@ -1,0 +1,2 @@
+insert into person(id_person, cd_external, ds_email, nm_person, dt_birth, in_status, ds_password, in_email_confirmed, dt_created, dt_updated)
+values (1001, 'd83dae5a0c194ccb8ee4', 'uncleduck@disney.com', 'Uncle Scrooge Mc Duck', '1947-12-01', 'A', '$2a$12$upe7Cs55.WbJJOOEhFP7SeQp1I560vjfl2C30aTEOIOqtgdEys6H6', 'Y', '2024-01-01', '2024-01-01');

@@ -10,8 +10,8 @@ public class GenerateExternalId {
         return UUID.randomUUID()
                 .toString()
                 .trim()
-                .substring(0, 20)
-                .toUpperCase();
+                .replace("-", "")
+                .substring(0, 20);
     }
 
 }

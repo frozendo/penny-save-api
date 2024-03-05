@@ -15,6 +15,7 @@ import jakarta.persistence.Table;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Table(name = "person")
@@ -104,5 +105,31 @@ public class Person {
 
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        Person person = (Person) object;
+        return Objects.equals(externalId, person.externalId) && Objects.equals(email, person.email) && Objects.equals(name, person.name) && Objects.equals(birthDate, person.birthDate) && status == person.status && Objects.equals(password, person.password) && emailConfirmed == person.emailConfirmed;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(externalId, email, name, birthDate, status, password, emailConfirmed);
+    }
+
+    @Override
+    public String toString() {
+        return "Person{" +
+                "externalId='" + externalId + '\'' +
+                ", email='" + email + '\'' +
+                ", name='" + name + '\'' +
+                ", birthDate=" + birthDate +
+                ", status=" + status +
+                ", password='" + password + '\'' +
+                ", emailConfirmed=" + emailConfirmed +
+                '}';
     }
 }
