@@ -4,6 +4,7 @@ import com.frozendo.pennysave.converters.YesNoConverter;
 import com.frozendo.pennysave.domain.converters.StatusPersonConverter;
 import com.frozendo.pennysave.domain.enums.StatusPersonEnum;
 import com.frozendo.pennysave.enums.YesNoEnum;
+import com.frozendo.pennysave.helper.GenerateExternalId;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
@@ -27,14 +28,14 @@ public class Person {
     @Column(name = "cd_external", nullable = false, length = 32)
     private String externalId;
 
-    @Column(name = "ds_email", nullable = false, length = 30)
+    @Column(name = "ds_email", nullable = false, length = 50)
     private String email;
 
-    @Column(name = "nm_person", nullable = false, length = 50)
+    @Column(name = "nm_person", nullable = false, length = 80)
     private String name;
 
     @Column(name = "dt_birth", nullable = false)
-    private LocalDate dateBirth;
+    private LocalDate birthDate;
 
     @Column(name = "in_status", nullable = false)
     @Convert(converter = StatusPersonConverter.class)
@@ -56,13 +57,14 @@ public class Person {
     public Person() {
     }
 
-    public Person(String externalId, String email, String name, LocalDate dateBirth, String password) {
-        this.externalId = externalId;
+    public Person(String email, String name, LocalDate birthDate, String password) {
         this.email = email;
         this.name = name;
-        this.dateBirth = dateBirth;
-        this.status = StatusPersonEnum.PENDING;
+        this.birthDate = birthDate;
         this.password = password;
+
+        this.externalId = GenerateExternalId.generate();
+        this.status = StatusPersonEnum.PENDING;
         this.emailConfirmed = YesNoEnum.NO;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
@@ -80,8 +82,8 @@ public class Person {
         return name;
     }
 
-    public LocalDate getDateBirth() {
-        return dateBirth;
+    public LocalDate getBirthDate() {
+        return birthDate;
     }
 
     public StatusPersonEnum getStatus() {

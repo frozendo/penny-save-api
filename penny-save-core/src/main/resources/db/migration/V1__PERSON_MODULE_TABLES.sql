@@ -7,7 +7,7 @@ CREATE TABLE currency (
 
 CREATE TABLE financial_space (
   id_financial_space serial PRIMARY KEY NOT NULL,
-  cd_external varchar(32) NOT NULL,
+  cd_external varchar(20) NOT NULL,
   nm_financial_space varchar(50) NOT NULL,
   in_active char(1) NOT NULL DEFAULT 'Y',
   dt_created timestamp NOT NULL,
@@ -17,9 +17,9 @@ CREATE TABLE financial_space (
 
 CREATE TABLE person (
   id_person serial PRIMARY KEY NOT NULL,
-  cd_external varchar(32) NOT NULL,
-  ds_email varchar(30) NOT NULL,
-  nm_person varchar(50) NOT NULL,
+  cd_external varchar(20) NOT NULL,
+  ds_email varchar(50) NOT NULL,
+  nm_person varchar(80) NOT NULL,
   dt_birth timestamp NOT NULL,
   in_status char(1) NOT NULL DEFAULT 'P',
   ds_password varchar(72) NOT NULL,

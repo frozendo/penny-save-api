@@ -29,9 +29,15 @@ subprojects {
 	dependencies {
 		implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 		implementation("org.springframework.boot:spring-boot-starter-web")
+		implementation("org.springframework.boot:spring-boot-starter-validation")
+		implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
+
 		runtimeOnly("org.postgresql:postgresql")
+
 		testImplementation("org.springframework.boot:spring-boot-starter-test")
 		testImplementation(testFixtures(project(":penny-save-test")))
+
+		testImplementation("io.rest-assured:spring-mock-mvc:5.3.2")
 	}
 
 	tasks.withType<Test> {
