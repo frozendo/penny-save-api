@@ -10,6 +10,7 @@ dependencies {
     testFixturesImplementation("org.springframework.boot:spring-boot-testcontainers")
     testFixturesImplementation("org.testcontainers:junit-jupiter")
     testFixturesImplementation("org.testcontainers:postgresql")
+    testFixturesImplementation("org.testcontainers:rabbitmq")
     testFixturesImplementation("io.rest-assured:spring-mock-mvc:5.3.2")
 }
 
