@@ -6,6 +6,8 @@ dependencies {
 
     implementation("org.springframework.boot:spring-boot-starter-mail")
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+
+    testImplementation(testFixtures(project(":penny-save-shared")))
 }
 
 tasks.withType<BootJar> {

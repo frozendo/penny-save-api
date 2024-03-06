@@ -1,6 +1,6 @@
 package com.frozendo.pennysave.integration;
 
-import com.frozendo.pennysave.IntegrationTestsBase;
+import com.frozendo.pennysave.PersonModuleIntegrationTest;
 import com.frozendo.pennysave.controller.PersonController;
 import com.frozendo.pennysave.domain.dto.request.PersonCreateRequest;
 import com.frozendo.pennysave.domain.enums.PersonMessageEnum;
@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @Sql(value = {"/scripts/person.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @Sql(value = {"/scripts/clean.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-class CreatePersonIntegrationTest extends IntegrationTestsBase {
+class CreatePersonIntegrationTest extends PersonModuleIntegrationTest {
 
     private static final String PERSON_EMAIL = "bwayne@waynecorp.com";
     private static final String PERSON_NAME = "Bruce Wayne";
