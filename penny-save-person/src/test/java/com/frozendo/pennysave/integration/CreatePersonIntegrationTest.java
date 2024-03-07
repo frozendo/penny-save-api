@@ -2,21 +2,30 @@ package com.frozendo.pennysave.integration;
 
 import com.frozendo.pennysave.PersonModuleIntegrationTest;
 import com.frozendo.pennysave.controller.PersonController;
+import com.frozendo.pennysave.domain.dto.events.CreatePersonEvent;
 import com.frozendo.pennysave.domain.dto.request.PersonCreateRequest;
 import com.frozendo.pennysave.domain.enums.PersonMessageEnum;
 import com.frozendo.pennysave.domain.enums.StatusPersonEnum;
 import com.frozendo.pennysave.enums.ApiMessageEnum;
 import com.frozendo.pennysave.repository.PersonRepository;
 import io.restassured.http.Method;
+import org.awaitility.Awaitility;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.QueueBuilder;
+import org.springframework.amqp.rabbit.core.RabbitAdmin;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.jdbc.Sql;
 
+import java.time.Duration;
 import java.time.LocalDate;
 
+import static com.frozendo.pennysave.domain.enums.PersonEventEnum.PERSON_CREATE_KEY;
+import static com.frozendo.pennysave.domain.enums.PersonEventEnum.PERSON_DIRECT_EXCHANGE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Sql(value = {"/scripts/person.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
@@ -26,12 +35,19 @@ class CreatePersonIntegrationTest extends PersonModuleIntegrationTest {
     private static final String PERSON_EMAIL = "bwayne@waynecorp.com";
     private static final String PERSON_NAME = "Bruce Wayne";
     private static final String PERSON_PASSWORD = "123@qwe#RS";
+    private static final String TEST_QUEUE = "test-queue";
 
     @Autowired
     private PersonRepository personRepository;
 
     @Autowired
     private BCryptPasswordEncoder encoder;
+
+    @Autowired
+    private RabbitAdmin rabbitAdmin;
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
     @Test
     void createNewPersonWithoutMandatoryFields() {
@@ -97,7 +113,7 @@ class CreatePersonIntegrationTest extends PersonModuleIntegrationTest {
     }
 
     @Test
-    void createNewPersonSuccessful() {
+    void createNewPersonSuccessfulAndCheckPasswordEncryption() {
         var personRequest = new PersonCreateRequest(PERSON_EMAIL,
                 PERSON_NAME,
                 LocalDate.now(),
@@ -125,6 +141,38 @@ class CreatePersonIntegrationTest extends PersonModuleIntegrationTest {
     }
 
     @Test
+    void createNewPersonSuccessfulAndCheckEventTriggered() {
+        createQueueAndSubscribeForPersonCreateEvent();
+
+        var personRequest = new PersonCreateRequest(PERSON_EMAIL,
+                PERSON_NAME,
+                LocalDate.now(),
+                PERSON_PASSWORD);
+
+        var personId = getRequest()
+                .body(getJson(personRequest))
+                .request(Method.POST, PersonController.URI)
+                .then()
+                .log().all()
+                .statusCode(HttpStatus.CREATED.value())
+                .body("id", Matchers.notNullValue())
+                .body("status", Matchers.equalTo(StatusPersonEnum.PENDING.name()))
+                .extract()
+                .path("id");
+
+        Awaitility.await()
+                .atMost(Duration.ofSeconds(10))
+                .pollInterval(Duration.ofSeconds(5))
+                .until(() -> {
+                        var personEvent = (CreatePersonEvent) rabbitTemplate.receiveAndConvert(TEST_QUEUE);
+                        return personEvent != null &&
+                                personEvent.externalId().equals(personId) &&
+                                personEvent.name().equals(PERSON_NAME) &&
+                                personEvent.email().equals(PERSON_EMAIL);
+                });
+    }
+
+    @Test
     void createNewPersonWhenEmailIsDuplicated() {
         var personRequest = new PersonCreateRequest("uncleduck@disney.com",
                 PERSON_NAME,
@@ -139,6 +187,18 @@ class CreatePersonIntegrationTest extends PersonModuleIntegrationTest {
                 .statusCode(HttpStatus.UNPROCESSABLE_ENTITY.value())
                 .body("code", Matchers.equalTo(PersonMessageEnum.EMAIL_DUPLICATED.getCode()))
                 .body("message", Matchers.equalTo(PersonMessageEnum.EMAIL_DUPLICATED.getMessage()));
+    }
+
+    private void createQueueAndSubscribeForPersonCreateEvent() {
+        var queue = QueueBuilder
+                .durable(TEST_QUEUE)
+                .build();
+        rabbitAdmin.declareQueue(queue);
+
+        var binding = new Binding(TEST_QUEUE,
+                Binding.DestinationType.QUEUE, PERSON_DIRECT_EXCHANGE.getProperty(),
+                PERSON_CREATE_KEY.getProperty(), null);
+        rabbitAdmin.declareBinding(binding);
     }
 
 }

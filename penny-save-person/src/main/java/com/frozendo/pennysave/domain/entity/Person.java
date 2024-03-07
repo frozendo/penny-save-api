@@ -72,6 +72,10 @@ public class Person {
         this.updatedAt = LocalDateTime.now();
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public String getExternalId() {
         return externalId;
     }
