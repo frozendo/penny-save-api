@@ -9,4 +9,5 @@ public interface PersonRepository extends CrudRepository<Person, Long> {
 
     Optional<Person> findByEmail(String email);
 
+    Optional<Person> findByExternalId(String externalId);
 }

@@ -5,6 +5,7 @@ import com.frozendo.pennysave.controller.PersonController;
 import com.frozendo.pennysave.domain.dto.events.CreatePersonEvent;
 import com.frozendo.pennysave.domain.dto.request.PersonCreateRequest;
 import com.frozendo.pennysave.domain.enums.PersonMessageEnum;
+import com.frozendo.pennysave.domain.enums.PersonOperationEnum;
 import com.frozendo.pennysave.domain.enums.StatusPersonEnum;
 import com.frozendo.pennysave.enums.ApiMessageEnum;
 import com.frozendo.pennysave.repository.PersonRepository;
@@ -168,7 +169,8 @@ class CreatePersonIntegrationTest extends PersonModuleIntegrationTest {
                         return personEvent != null &&
                                 personEvent.externalId().equals(personId) &&
                                 personEvent.name().equals(PERSON_NAME) &&
-                                personEvent.email().equals(PERSON_EMAIL);
+                                personEvent.email().equals(PERSON_EMAIL) &&
+                                personEvent.operation().equals(PersonOperationEnum.CREATED);
                 });
     }
 

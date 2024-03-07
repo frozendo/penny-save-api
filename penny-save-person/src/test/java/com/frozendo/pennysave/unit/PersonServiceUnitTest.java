@@ -4,6 +4,7 @@ import com.frozendo.pennysave.domain.dto.events.CreatePersonEvent;
 import com.frozendo.pennysave.domain.entity.Person;
 import com.frozendo.pennysave.domain.enums.PersonMessageEnum;
 import com.frozendo.pennysave.exceptions.BusinessException;
+import com.frozendo.pennysave.exceptions.EntityNotFoundException;
 import com.frozendo.pennysave.repository.PersonRepository;
 import com.frozendo.pennysave.service.PersonService;
 import org.junit.jupiter.api.Tag;
@@ -13,6 +14,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import java.time.LocalDate;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -39,6 +41,35 @@ class PersonServiceUnitTest {
         this.rabbitTemplate = mock(RabbitTemplate.class);
         this.personRepository = mock(PersonRepository.class);
         this.personService = new PersonService(personRepository, rabbitTemplate);
+    }
+
+    @Test
+    void getPersonByExternalId() {
+        var mockPerson = new Person(PERSON_EMAIL, PERSON_NAME, LocalDate.now(), PERSON_PASSWORD);
+
+        when(personRepository.findByExternalId(mockPerson.getExternalId())).thenReturn(Optional.of(mockPerson));
+
+        var person = personService.getByExternalId(mockPerson.getExternalId());
+
+        assertThat(person).isNotNull();
+
+        verify(personRepository, times(1)).findByExternalId(mockPerson.getExternalId());
+        verifyNoMoreInteractions(personRepository);
+    }
+
+    @Test
+    void getPersonByExternalIdWhenPersonNotExist() {
+        var externalId = "abc123";
+        var expectedMessage = "Entity id %s not found!".formatted(externalId);
+
+        when(personRepository.findByExternalId(externalId)).thenReturn(Optional.empty());
+
+        assertThatExceptionOfType(EntityNotFoundException.class).isThrownBy(
+                () -> personService.getByExternalId(externalId)
+        ).withMessage(expectedMessage);
+
+        verify(personRepository, times(1)).findByExternalId(externalId);
+        verifyNoMoreInteractions(personRepository);
     }
 
     @Test
