@@ -1,6 +1,0 @@
-app:
-  email:
-    from: contato@pennysave.com
-    name: Penny Save
-    subject: Penny Save - Confirme Sua Conta
-    link: http://localhost:9000/penny-save
