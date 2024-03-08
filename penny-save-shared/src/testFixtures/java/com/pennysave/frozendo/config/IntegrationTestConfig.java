@@ -8,6 +8,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -19,9 +20,8 @@ import java.lang.annotation.Target;
 @SpringBootConfiguration
 @EnableAutoConfiguration
 @ComponentScan("com.frozendo.pennysave")
-@EntityScan("com.frozendo.pennysave.domain")
-@EnableJpaRepositories("com.frozendo.pennysave.repository")
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ContextConfiguration(initializers = DockerTestEnvironment.class)
 public @interface IntegrationTestConfig {
 }

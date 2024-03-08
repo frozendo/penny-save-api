@@ -2,11 +2,8 @@ package com.frozendo.pennysave;
 
 import com.frozendo.pennysave.config.properties.PennySaveEmailProperties;
 import com.frozendo.pennysave.config.properties.RabbitProperties;
-import com.icegreen.greenmail.configuration.GreenMailConfiguration;
-import com.icegreen.greenmail.junit5.GreenMailExtension;
-import com.icegreen.greenmail.util.ServerSetup;
 import com.pennysave.frozendo.config.IntegrationTestConfig;
-import org.junit.jupiter.api.extension.RegisterExtension;
+import com.pennysave.frozendo.IntegrationTestsBase;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 @IntegrationTestConfig

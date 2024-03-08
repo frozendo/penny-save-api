@@ -36,7 +36,6 @@ subprojects {
 		runtimeOnly("org.postgresql:postgresql")
 
 		testImplementation("org.springframework.boot:spring-boot-starter-test")
-		testImplementation(testFixtures(project(":penny-save-test")))
 		testImplementation("io.rest-assured:spring-mock-mvc:5.3.2")
 		testImplementation("com.icegreen:greenmail-junit5:2.0.1")
 	}

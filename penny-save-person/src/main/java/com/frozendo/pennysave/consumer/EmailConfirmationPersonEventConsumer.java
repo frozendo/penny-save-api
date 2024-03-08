@@ -34,7 +34,6 @@ public class EmailConfirmationPersonEventConsumer extends RabbitDelayedMessageHa
         try {
             emailConfirmationService.notificationForPersonCreateEvent(createPersonEvent);
         } catch (Exception exception) {
-            logger.error("desgraça da buceta de error que nem sempre aparece {}", exception.getMessage());
             retryEmailConfirmationEvent(createPersonEvent, message);
         }
     }

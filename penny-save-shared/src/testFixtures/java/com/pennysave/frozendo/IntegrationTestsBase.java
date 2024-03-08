@@ -1,8 +1,8 @@
-package com.frozendo.pennysave;
+package com.pennysave.frozendo;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.frozendo.pennysave.config.DockerTestEnvironment;
+import com.pennysave.frozendo.config.DockerTestEnvironment;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
@@ -11,7 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.server.LocalServerPort;
 
-public class IntegrationTestsBase extends DockerTestEnvironment {
+public class IntegrationTestsBase {
 
     @LocalServerPort
     private Integer port;

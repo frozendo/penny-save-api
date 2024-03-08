@@ -176,7 +176,7 @@ class CreatePersonIntegrationTest extends PersonModuleIntegrationTest {
 
     @Test
     void createNewPersonWhenEmailIsDuplicated() {
-        var personRequest = new PersonCreateRequest("uncleduck@disney.com",
+        var personRequest = new PersonCreateRequest("montgomery@burns.com",
                 PERSON_NAME,
                 LocalDate.now(),
                 PERSON_PASSWORD);
