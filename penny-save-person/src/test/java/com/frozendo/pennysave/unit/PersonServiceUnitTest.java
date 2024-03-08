@@ -2,7 +2,7 @@ package com.frozendo.pennysave.unit;
 
 import com.frozendo.pennysave.domain.dto.events.CreatePersonEvent;
 import com.frozendo.pennysave.domain.entity.Person;
-import com.frozendo.pennysave.domain.enums.PersonMessageEnum;
+import com.frozendo.pennysave.domain.enums.PersonBusinessMessageEnum;
 import com.frozendo.pennysave.exceptions.BusinessException;
 import com.frozendo.pennysave.exceptions.EntityNotFoundException;
 import com.frozendo.pennysave.repository.PersonRepository;
@@ -100,8 +100,8 @@ class PersonServiceUnitTest {
         assertThat(exception).isNotNull();
         assertThat(exception.getMessage()).isNotNull();
         assertThat(exception.getCode()).isNotNull();
-        assertThat(exception.getMessage()).isEqualTo(PersonMessageEnum.EMAIL_DUPLICATED.getMessage());
-        assertThat(exception.getCode()).isEqualTo(PersonMessageEnum.EMAIL_DUPLICATED.getCode());
+        assertThat(exception.getMessage()).isEqualTo(PersonBusinessMessageEnum.EMAIL_DUPLICATED.getMessage());
+        assertThat(exception.getCode()).isEqualTo(PersonBusinessMessageEnum.EMAIL_DUPLICATED.getCode());
 
         verify(personRepository, times(1)).findByEmail(PERSON_EMAIL);
         verifyNoMoreInteractions(personRepository);

@@ -3,7 +3,7 @@ package com.frozendo.pennysave.unit;
 import com.frozendo.pennysave.domain.dto.events.CreatePersonEvent;
 import com.frozendo.pennysave.domain.entity.EmailConfirmation;
 import com.frozendo.pennysave.domain.entity.Person;
-import com.frozendo.pennysave.domain.enums.PersonOperationEnum;
+import com.frozendo.pennysave.domain.enums.PersonActionEnum;
 import com.frozendo.pennysave.repository.EmailConfirmationRepository;
 import com.frozendo.pennysave.service.EmailConfirmationService;
 import com.frozendo.pennysave.service.EmailSenderService;
@@ -48,13 +48,13 @@ class EmailConfirmationServiceUnitTest {
     void dealWithPersonEventWhenPersonHasNotConfirmationPending() {
         var person = new Person(PERSON_EMAIL, PERSON_NAME, LocalDate.now(), PASSWORD);
         var createPersonEvent = new CreatePersonEvent(
-                PERSON_ID, PERSON_EXTERNAL_ID, PERSON_EMAIL, PERSON_NAME, PersonOperationEnum.CREATED);
+                PERSON_ID, PERSON_EXTERNAL_ID, PERSON_EMAIL, PERSON_NAME, PersonActionEnum.CREATED);
 
         when(personService.getByExternalId(PERSON_EXTERNAL_ID)).thenReturn(person);
         when(emailConfirmationRepository
                 .findConfirmationPending(PERSON_ID)).thenReturn(Optional.empty());
 
-        var result = emailConfirmationService.dealWithPersonEvent(createPersonEvent);
+        var result = emailConfirmationService.notificationForPersonCreateEvent(createPersonEvent);
 
         assertThat(result).isTrue();
 
@@ -72,14 +72,14 @@ class EmailConfirmationServiceUnitTest {
     void dealWithPersonEventWhenPersonHasConfirmationPending() {
         var person = new Person(PERSON_EMAIL, PERSON_NAME, LocalDate.now(), PASSWORD);
         var createPersonEvent = new CreatePersonEvent(
-                PERSON_ID, PERSON_EXTERNAL_ID, PERSON_EMAIL, PERSON_NAME, PersonOperationEnum.CREATED);
-        var emailConfirmation = new EmailConfirmation("def098", person, PersonOperationEnum.CREATED);
+                PERSON_ID, PERSON_EXTERNAL_ID, PERSON_EMAIL, PERSON_NAME, PersonActionEnum.CREATED);
+        var emailConfirmation = new EmailConfirmation("def098", person, PersonActionEnum.CREATED);
 
         when(personService.getByExternalId(PERSON_EXTERNAL_ID)).thenReturn(person);
         when(emailConfirmationRepository
                 .findConfirmationPending(PERSON_ID)).thenReturn(Optional.of(emailConfirmation));
 
-        var result = emailConfirmationService.dealWithPersonEvent(createPersonEvent);
+        var result = emailConfirmationService.notificationForPersonCreateEvent(createPersonEvent);
 
         assertThat(result).isFalse();
 

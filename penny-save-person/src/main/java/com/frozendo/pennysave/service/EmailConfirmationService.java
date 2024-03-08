@@ -6,6 +6,8 @@ import com.frozendo.pennysave.domain.entity.Person;
 import com.frozendo.pennysave.repository.EmailConfirmationRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class EmailConfirmationService {
 
@@ -21,13 +23,13 @@ public class EmailConfirmationService {
         this.emailSenderService = emailSenderService;
     }
 
-    public boolean dealWithPersonEvent(CreatePersonEvent createPersonEvent) {
+    public boolean notificationForPersonCreateEvent(CreatePersonEvent createPersonEvent) {
         var confirmationForEvent = emailConfirmationRepository.findConfirmationPending(createPersonEvent.id());
 
         if (confirmationForEvent.isEmpty()) {
             var person = personService.getByExternalId(createPersonEvent.externalId());
             createEmailConfirmation(createPersonEvent, person);
-            sendPersonNotification(person);
+            sendNotification(person);
             return true;
         }
         return false;
@@ -35,11 +37,18 @@ public class EmailConfirmationService {
 
     private void createEmailConfirmation(CreatePersonEvent createPersonEvent, Person person) {
         var newEmailConfirmation = new EmailConfirmation(
-                createPersonEvent.externalId(), person, createPersonEvent.operation());
+                generateEmailConfirmationToken(), person, createPersonEvent.action());
         emailConfirmationRepository.save(newEmailConfirmation);
     }
 
-    private void sendPersonNotification(Person person) {
+    private void sendNotification(Person person) {
         emailSenderService.sendEmail(person);
+    }
+
+    private String generateEmailConfirmationToken() {
+        return UUID.randomUUID()
+                .toString()
+                .trim()
+                .replace("-", "");
     }
 }

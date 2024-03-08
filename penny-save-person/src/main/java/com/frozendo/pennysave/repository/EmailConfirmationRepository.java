@@ -13,7 +13,7 @@ public interface EmailConfirmationRepository extends CrudRepository<EmailConfirm
             FROM EmailConfirmation e
             JOIN e.person p
             where p.id = :personId
-            and e.emailConfirmed = 'N'
+            and e.emailConfirmed = YesNoEnum.NO
             """;
 
     Optional<EmailConfirmation> findByToken(String token);

@@ -4,8 +4,8 @@ import com.frozendo.pennysave.PersonModuleIntegrationTest;
 import com.frozendo.pennysave.controller.PersonController;
 import com.frozendo.pennysave.domain.dto.events.CreatePersonEvent;
 import com.frozendo.pennysave.domain.dto.request.PersonCreateRequest;
-import com.frozendo.pennysave.domain.enums.PersonMessageEnum;
-import com.frozendo.pennysave.domain.enums.PersonOperationEnum;
+import com.frozendo.pennysave.domain.enums.PersonBusinessMessageEnum;
+import com.frozendo.pennysave.domain.enums.PersonActionEnum;
 import com.frozendo.pennysave.domain.enums.StatusPersonEnum;
 import com.frozendo.pennysave.enums.ApiMessageEnum;
 import com.frozendo.pennysave.repository.PersonRepository;
@@ -170,7 +170,7 @@ class CreatePersonIntegrationTest extends PersonModuleIntegrationTest {
                                 personEvent.externalId().equals(personId) &&
                                 personEvent.name().equals(PERSON_NAME) &&
                                 personEvent.email().equals(PERSON_EMAIL) &&
-                                personEvent.operation().equals(PersonOperationEnum.CREATED);
+                                personEvent.action().equals(PersonActionEnum.CREATED);
                 });
     }
 
@@ -187,8 +187,8 @@ class CreatePersonIntegrationTest extends PersonModuleIntegrationTest {
                 .then()
                 .log().all()
                 .statusCode(HttpStatus.UNPROCESSABLE_ENTITY.value())
-                .body("code", Matchers.equalTo(PersonMessageEnum.EMAIL_DUPLICATED.getCode()))
-                .body("message", Matchers.equalTo(PersonMessageEnum.EMAIL_DUPLICATED.getMessage()));
+                .body("code", Matchers.equalTo(PersonBusinessMessageEnum.EMAIL_DUPLICATED.getCode()))
+                .body("message", Matchers.equalTo(PersonBusinessMessageEnum.EMAIL_DUPLICATED.getMessage()));
     }
 
     private void createQueueAndSubscribeForPersonCreateEvent() {

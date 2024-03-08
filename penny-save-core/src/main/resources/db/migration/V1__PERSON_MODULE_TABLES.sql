@@ -44,7 +44,7 @@ CREATE TABLE email_confirmation (
   dt_limit_confirmation timestamp NOT NULL,
   dt_confirmation timestamp,
   in_email_confirmed char(1) NOT NULL DEFAULT 'N',
-  in_person_operation char(1) NOT NULL DEFAULT 'C',
+  in_person_action char(1) NOT NULL DEFAULT 'C',
   id_person bigint NOT NULL
 );
 

@@ -18,37 +18,37 @@ public class EmailSenderService {
     private static final String CONFIRMATION_LINK_VARIABLE = "confirmation_link";
     private static final String CONFIRM_EMAIL_TEMPLATE = "confirm_email";
 
-    private final JavaMailSender mailSender;
+//    private final JavaMailSender mailSender;
     private final TemplateEngine templateEngine;
 
-    public EmailSenderService(JavaMailSender mailSender, TemplateEngine templateEngine) {
-        this.mailSender = mailSender;
+    public EmailSenderService(TemplateEngine templateEngine) {
+//        this.mailSender = mailSender;
         this.templateEngine = templateEngine;
     }
 
     public void sendEmail(Person person) {
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message);
-
-        try {
-            helper.setFrom("flavio.ap.rozendo@gmail.com", "Flavio Rozendo"); //todo
-            helper.setTo(person.getEmail());
-            helper.setSubject("Penny Save - Confirme Sua Conta");
-
-            Context context = new Context();
-            context.setVariable(PERSON_NAME_VARIABLE, person.getName());
-            context.setVariable(CONFIRMATION_LINK_VARIABLE, "http://localhost:9000/penny-save"); //todo
-            String emailTemplate = templateEngine.process(CONFIRM_EMAIL_TEMPLATE, context);
-
-            helper.setText(emailTemplate, true);
-
-        } catch (MessagingException e) {
-            throw new RuntimeException(e);
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
-
-        mailSender.send(message);
+//        MimeMessage message = mailSender.createMimeMessage();
+//        MimeMessageHelper helper = new MimeMessageHelper(message);
+//
+//        try {
+//            helper.setFrom("flavio.ap.rozendo@gmail.com", "Flavio Rozendo"); //todo
+//            helper.setTo(person.getEmail());
+//            helper.setSubject("Penny Save - Confirme Sua Conta");
+//
+//            Context context = new Context();
+//            context.setVariable(PERSON_NAME_VARIABLE, person.getName());
+//            context.setVariable(CONFIRMATION_LINK_VARIABLE, "http://localhost:9000/penny-save"); //todo
+//            String emailTemplate = templateEngine.process(CONFIRM_EMAIL_TEMPLATE, context);
+//
+//            helper.setText(emailTemplate, true);
+//
+//        } catch (MessagingException e) {
+//            throw new RuntimeException(e);
+//        } catch (UnsupportedEncodingException e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//        mailSender.send(message);
     }
 
 }

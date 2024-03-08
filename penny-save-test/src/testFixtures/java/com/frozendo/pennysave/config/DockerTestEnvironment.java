@@ -17,8 +17,8 @@ public class DockerTestEnvironment {
             .withDatabaseName("tests-db");
 
     @Container
-    static RabbitMQContainer rabbitMQContainer = new RabbitMQContainer("rabbitmq:3.13.0-alpine")
-            .withExposedPorts(5672);
+    static RabbitMQContainer rabbitMQContainer = new RabbitMQContainer("rabbitmq:3.13.0-management-alpine")
+            .withExposedPorts(5672, 15672);
 
     @DynamicPropertySource
     static void testEnvironmentProperties(DynamicPropertyRegistry registry) {

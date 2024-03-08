@@ -1,14 +1,14 @@
 package com.frozendo.pennysave.domain.enums;
 
-import com.frozendo.pennysave.enums.MessageEnum;
+import com.frozendo.pennysave.enums.BusinessMessage;
 
-public enum PersonMessageEnum implements MessageEnum {
+public enum PersonBusinessMessageEnum implements BusinessMessage {
     EMAIL_DUPLICATED("2001", "Email already exist and cannot be used");
 
     private final String code;
     private final String message;
 
-    PersonMessageEnum(String code, String message) {
+    PersonBusinessMessageEnum(String code, String message) {
         this.code = code;
         this.message = message;
     }

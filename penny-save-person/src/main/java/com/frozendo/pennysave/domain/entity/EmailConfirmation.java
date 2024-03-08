@@ -1,8 +1,8 @@
 package com.frozendo.pennysave.domain.entity;
 
 import com.frozendo.pennysave.converters.YesNoConverter;
-import com.frozendo.pennysave.domain.converters.PersonOperationConverter;
-import com.frozendo.pennysave.domain.enums.PersonOperationEnum;
+import com.frozendo.pennysave.domain.converters.PersonActionConverter;
+import com.frozendo.pennysave.domain.enums.PersonActionEnum;
 import com.frozendo.pennysave.enums.YesNoEnum;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -43,21 +43,21 @@ public class EmailConfirmation {
     @Convert(converter = YesNoConverter.class)
     private YesNoEnum emailConfirmed;
 
-    @Column(name = "in_person_operation", nullable = false)
-    @Convert(converter = PersonOperationConverter.class)
-    private PersonOperationEnum operation;
+    @Column(name = "in_person_action", nullable = false)
+    @Convert(converter = PersonActionConverter.class)
+    private PersonActionEnum action;
 
-    @JoinColumn
+    @JoinColumn(name = "id_person")
     @ManyToOne(fetch = FetchType.EAGER)
     private Person person;
 
     public EmailConfirmation() {
     }
 
-    public EmailConfirmation(String token, Person person, PersonOperationEnum operation) {
+    public EmailConfirmation(String token, Person person, PersonActionEnum action) {
         this.token = token;
         this.person = person;
-        this.operation = operation;
+        this.action = action;
 
         this.dateCreated = LocalDateTime.now();
         this.dateLimitConfirmation = LocalDateTime.now();
@@ -88,8 +88,8 @@ public class EmailConfirmation {
         return emailConfirmed;
     }
 
-    public PersonOperationEnum getOperation() {
-        return operation;
+    public PersonActionEnum getAction() {
+        return action;
     }
 
     public Person getPerson() {
@@ -101,12 +101,12 @@ public class EmailConfirmation {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
         EmailConfirmation that = (EmailConfirmation) object;
-        return Objects.equals(token, that.token) && Objects.equals(dateCreated, that.dateCreated) && Objects.equals(dateLimitConfirmation, that.dateLimitConfirmation) && Objects.equals(dateConfirmation, that.dateConfirmation) && emailConfirmed == that.emailConfirmed && operation == that.operation && person.equals(that.person);
+        return Objects.equals(token, that.token) && Objects.equals(dateCreated, that.dateCreated) && Objects.equals(dateLimitConfirmation, that.dateLimitConfirmation) && Objects.equals(dateConfirmation, that.dateConfirmation) && emailConfirmed == that.emailConfirmed && action == that.action && person.equals(that.person);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(token, dateCreated, dateLimitConfirmation, dateConfirmation, emailConfirmed, operation) + person.hashCode();
+        return Objects.hash(token, dateCreated, dateLimitConfirmation, dateConfirmation, emailConfirmed, action) + person.hashCode();
     }
 
     @Override
@@ -117,7 +117,7 @@ public class EmailConfirmation {
                 ", dateLimitConfirmation=" + dateLimitConfirmation +
                 ", dateConfirmation=" + dateConfirmation +
                 ", emailConfirmed=" + emailConfirmed +
-                ", operation=" + operation +
+                ", action=" + action +
                 ", person=" + person +
                 '}';
     }

@@ -9,7 +9,6 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 
 @Configuration
 public class RabbitConfig {
@@ -20,7 +19,8 @@ public class RabbitConfig {
         this.rabbitProperties = rabbitProperties;
     }
 
-    public ConnectionFactory connectionFactory() {
+    @Bean
+    public ConnectionFactory rabbitConnectionFactory() {
         var connectionFactory = new CachingConnectionFactory();
         connectionFactory.setHost(rabbitProperties.host());
         connectionFactory.setPort(rabbitProperties.port());
@@ -32,20 +32,20 @@ public class RabbitConfig {
     }
 
     @Bean
-    public Jackson2JsonMessageConverter createJackson2JsonMessageConverter(ObjectMapper mapper) {
+    public Jackson2JsonMessageConverter jackson2JsonMessageConverter(ObjectMapper mapper) {
         return new Jackson2JsonMessageConverter(mapper);
     }
 
     @Bean
     public RabbitTemplate createRabbitTemplate(ObjectMapper mapper) {
-        var rabbitTemplate = new RabbitTemplate(connectionFactory());
-        rabbitTemplate.setMessageConverter(createJackson2JsonMessageConverter(mapper));
+        var rabbitTemplate = new RabbitTemplate(rabbitConnectionFactory());
+        rabbitTemplate.setMessageConverter(jackson2JsonMessageConverter(mapper));
         return rabbitTemplate;
     }
 
     @Bean
     public RabbitAdmin createRabbitAdmin() {
-        return new RabbitAdmin(connectionFactory());
+        return new RabbitAdmin(rabbitConnectionFactory());
     }
 
 }
