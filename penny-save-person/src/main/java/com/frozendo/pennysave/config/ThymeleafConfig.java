@@ -1,4 +1,4 @@
-package com.frozendo.pennysave;
+package com.frozendo.pennysave.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

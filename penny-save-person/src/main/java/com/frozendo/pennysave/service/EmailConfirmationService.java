@@ -23,16 +23,14 @@ public class EmailConfirmationService {
         this.emailSenderService = emailSenderService;
     }
 
-    public boolean notificationForPersonCreateEvent(CreatePersonEvent createPersonEvent) {
-        var confirmationForEvent = emailConfirmationRepository.findConfirmationPending(createPersonEvent.id());
+    public void notificationForPersonCreateEvent(CreatePersonEvent createPersonEvent) {
+        var confirmationPending = emailConfirmationRepository.findConfirmationPending(createPersonEvent.id());
 
-        if (confirmationForEvent.isEmpty()) {
+        if (confirmationPending.isEmpty()) {
             var person = personService.getByExternalId(createPersonEvent.externalId());
             createEmailConfirmation(createPersonEvent, person);
-            sendNotification(person);
-            return true;
         }
-        return false;
+        sendNotification(createPersonEvent.email(), createPersonEvent.name());
     }
 
     private void createEmailConfirmation(CreatePersonEvent createPersonEvent, Person person) {
@@ -41,8 +39,8 @@ public class EmailConfirmationService {
         emailConfirmationRepository.save(newEmailConfirmation);
     }
 
-    private void sendNotification(Person person) {
-        emailSenderService.sendEmail(person);
+    private void sendNotification(String email, String name) {
+        emailSenderService.sendEmail(email, name);
     }
 
     private String generateEmailConfirmationToken() {

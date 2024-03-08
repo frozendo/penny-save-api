@@ -1,5 +1,6 @@
 package com.frozendo.pennysave;
 
+import com.frozendo.pennysave.config.properties.PennySaveEmailProperties;
 import com.frozendo.pennysave.config.properties.RabbitProperties;
 import com.frozendo.pennysave.service.TestSecurityService;
 import com.frozendo.pennysave.service.TestShareService;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @SpringBootApplication
 @RestController
 @EnableConfigurationProperties({
-		RabbitProperties.class
+		RabbitProperties.class, PennySaveEmailProperties.class
 })
 public class PennySaveApplication {
 

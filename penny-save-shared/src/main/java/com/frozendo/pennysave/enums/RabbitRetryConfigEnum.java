@@ -7,19 +7,19 @@ public enum RabbitRetryConfigEnum {
     SECOND_RETRY(2, 10000),
     THIRD_RETRY(3, 30000);
 
-    private final int retryNumber;
-    private final int expirationTime;
+    private final Integer retryNumber;
+    private final Integer expirationTime;
 
     RabbitRetryConfigEnum(int retryNumber, int expirationTime) {
         this.retryNumber = retryNumber;
         this.expirationTime = expirationTime;
     }
 
-    public int getRetryNumber() {
+    public Integer getRetryNumber() {
         return retryNumber;
     }
 
-    public int getExpirationTime() {
+    public Integer getExpirationTime() {
         return expirationTime;
     }
 
@@ -28,7 +28,7 @@ public enum RabbitRetryConfigEnum {
                 .filter(i -> i.retryNumber == retryNumber)
                 .findFirst()
                 .orElse(THIRD_RETRY);
-        return String.valueOf(retryConfig.expirationTime);
+        return retryConfig.expirationTime.toString();
     }
 
 }

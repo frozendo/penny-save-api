@@ -54,14 +54,12 @@ class EmailConfirmationServiceUnitTest {
         when(emailConfirmationRepository
                 .findConfirmationPending(PERSON_ID)).thenReturn(Optional.empty());
 
-        var result = emailConfirmationService.notificationForPersonCreateEvent(createPersonEvent);
-
-        assertThat(result).isTrue();
+        emailConfirmationService.notificationForPersonCreateEvent(createPersonEvent);
 
         verify(personService, times(1)).getByExternalId(PERSON_EXTERNAL_ID);
         verify(emailConfirmationRepository, times(1)).findConfirmationPending(PERSON_ID);
         verify(emailConfirmationRepository, times(1)).save(any(EmailConfirmation.class));
-        verify(emailSenderService, times(1)).sendEmail(person);
+        verify(emailSenderService, times(1)).sendEmail(PERSON_EMAIL, PERSON_NAME);
 
         verifyNoMoreInteractions(personService);
         verifyNoMoreInteractions(emailConfirmationRepository);
@@ -79,16 +77,15 @@ class EmailConfirmationServiceUnitTest {
         when(emailConfirmationRepository
                 .findConfirmationPending(PERSON_ID)).thenReturn(Optional.of(emailConfirmation));
 
-        var result = emailConfirmationService.notificationForPersonCreateEvent(createPersonEvent);
-
-        assertThat(result).isFalse();
+        emailConfirmationService.notificationForPersonCreateEvent(createPersonEvent);
 
         verify(emailConfirmationRepository, times(1)).findConfirmationPending(PERSON_ID);
+        verify(emailSenderService, times(1)).sendEmail(PERSON_EMAIL, PERSON_NAME);
 
         verifyNoMoreInteractions(emailConfirmationRepository);
+        verifyNoMoreInteractions(emailSenderService);
 
         verifyNoInteractions(personService);
-        verifyNoInteractions(emailSenderService);
     }
 
 }

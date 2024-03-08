@@ -1,6 +1,13 @@
 server:
   port: 9000
 
+app:
+  email:
+    from: contato@pennysave.com
+    name: Penny Save
+    subject: Penny Save - Confirme Sua Conta
+    link: http://localhost:9000/penny-save
+
 spring:
   application:
     name: penny-save-api
